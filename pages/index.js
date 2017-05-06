@@ -16,7 +16,7 @@ export default class extends Component {
      */
     constructor(props, context) {
         super(props, context);
-        
+        this.onClickButton = this.onClickButton.bind(this);
     }
 
     /**
@@ -41,8 +41,10 @@ export default class extends Component {
             <title>3D Hologram</title>
             <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
         </Head>
-        <Header />
-        <div style={style.button}>
+        <div style={style.header} className="header">
+            <Header />
+        </div>
+        <div style={style.button} onClick={this.onClickButton}>
             <Button />
         </div>
     </div>
@@ -58,18 +60,21 @@ export default class extends Component {
         const $body_content = document.querySelector(".body_content");
         $body_content.style.height = window_height + "px";
     }
+
+    onClickButton() {
+        const $header = document.querySelector(".header");
+        const tmp_height = $header.style.height;
+        if ($header.style.display == "none") {
+            $header.style.display = "inline";
+        } else {
+            $header.style.display = "none";
+        }
+    }
 }
 
 const style = {
-    box: {
-        width: "100px",
-        height: "100px",
-        background: "#000",
-        transition: "all 300ms 0s ease"
-    },
-    box_hover: {
-        background: "#ccc",
-        width: "300px",
+    header: {
+        display: "none"
     },
     content: {
         position: "relative",
