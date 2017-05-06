@@ -16,6 +16,7 @@ export default class extends Component {
      */
     constructor(props, context) {
         super(props, context);
+        
     }
 
     /**
@@ -24,6 +25,8 @@ export default class extends Component {
      * @see {Component}
      */
     componentDidMount() {
+        this.setAdjustmentWindowSize();
+        window.addEventListener("resize", this.setAdjustmentWindowSize);
     }
 
     /**
@@ -33,16 +36,27 @@ export default class extends Component {
     render() {
         return (
 <MuiThemeProvider muiTheme={getMuiTheme({ userAgent: false })}>
-    <div style={style.content}>
+    <div style={style.content} className="body_content">
         <Head>
             <title>3D Hologram</title>
             <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
         </Head>
         <Header />
-        <Button />
+        <div style={style.button}>
+            <Button />
+        </div>
     </div>
 </MuiThemeProvider>
         );
+    }
+
+    /**
+     * 幅調整を行う
+     */
+    setAdjustmentWindowSize() {
+        const window_height = window.innerHeight;
+        const $body_content = document.querySelector(".body_content");
+        $body_content.style.height = window_height + "px";
     }
 }
 
@@ -58,6 +72,11 @@ const style = {
         width: "300px",
     },
     content: {
-        textAlign: "center"
+        position: "relative",
+    },
+    button: {
+        position: "absolute",
+        top: "50%",
+        left: "50%",
     }
 };
