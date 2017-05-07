@@ -19,7 +19,7 @@ export default class Button extends Component {
     render() {
         return (
 <IconButton>
-    <ActionList />
+    <ActionList color={fullWhite} />
 </IconButton>
         );
     }

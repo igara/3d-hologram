@@ -1,5 +1,6 @@
 import React, {Component} from "react";
-import AppBar from "material-ui/AppBar";
+import Drawer from 'material-ui/Drawer';
+import MenuItem from 'material-ui/MenuItem';
 
 export default class Sidebar extends Component {
     /**
@@ -8,6 +9,10 @@ export default class Sidebar extends Component {
      */
     constructor(props, context) {
         super(props, context);
+        this.state = {
+            open: false
+        };
+        this.handleClose = this.handleClose.bind(this);
     }
 
     /**
@@ -16,10 +21,16 @@ export default class Sidebar extends Component {
      */
     render() {
         return (
-<AppBar
-    title="3D-Hologram"
-    iconClassNameRight="muidocs-icon-navigation-expand-more"
-/>
+<Drawer
+    docked={false}
+    width={200}
+    open={this.state.open}
+    onRequestChange={(open) => this.setState({open})}
+>
+    <MenuItem onTouchTap={this.handleClose}>サンプル1</MenuItem>
+    <MenuItem onTouchTap={this.handleClose}>サンプル2</MenuItem>
+    <MenuItem onTouchTap={this.handleClose}>ホログラムデータを作る</MenuItem>
+</Drawer>
         );
     }
 
@@ -28,5 +39,17 @@ export default class Sidebar extends Component {
      * @see {Component}
      */
     componentDidMount() {
+    }
+
+    handleToggle() {
+        this.setState({
+            open: !this.state.open
+        });
+    }
+
+    handleClose() {
+        this.setState({
+            open: false
+        });
     }
 }
