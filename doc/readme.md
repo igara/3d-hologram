@@ -1,6 +1,5 @@
 # doc
 
-e-Statのメモ  
 執筆内容はこちらを参照  
 [page_list.md](page_list.md)  
 
