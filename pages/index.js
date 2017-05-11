@@ -9,6 +9,7 @@ import Head from "next/head";
 import Sidebar from "../components/sidebar.js";
 import Button from "../components/button.js";
 import Image from "../components/image.js";
+import Hanabi from "../components/hanabi.js";
 
 export default class extends Component {
     /**
@@ -64,16 +65,16 @@ export default class extends Component {
         <Sidebar ref="sidebar" />
         <div className="hologram" style={style.hologram}>
             <div style={style.image_top} className="image">
-                <Image />
+                <Hanabi hanabi_num="1" />
             </div>
             <div style={style.image_right} className="image">
-                <Image />
+                <Hanabi hanabi_num="2" />
             </div>
             <div style={style.image_bottom} className="image">
-                <Image />
+                <Hanabi hanabi_num="3" />
             </div>
             <div style={style.image_left} className="image">
-                <Image />
+                <Hanabi hanabi_num="4" />
             </div>
             <div style={style.button} onClick={this.onClickButton}>
                 <Button />
@@ -138,6 +139,9 @@ const style = {
         top: "50%",
         left: "50%",
         transform: "translateY(-50%) translateX(-50%)",
+    },
+    iframe: {
+        borderWidth: "0px",
     },
     image_top: {
         position: "absolute",
