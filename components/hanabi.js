@@ -258,7 +258,7 @@ export default class Hanabi extends Component {
         function animationLoop() {
             if( !hanabiMaker() ) {
                 if( rising.rise ) {
-                    setTimeout( makeHibanaList, 0 );
+                    setTimeout( makeHibanaList, 1000 / 1 );
                 }
             }
             if ( render2() ) {
