@@ -151,14 +151,17 @@ const style = {
         position: "absolute",
         right: "0%",
         top: "33%",
+        transform: "rotate(90deg)",
     },
     image_bottom: {
         position: "absolute",
         left: "33%",
         bottom: "0%",
+        transform: "rotate(180deg)",
     },
     image_left: {
         position: "absolute",
         top: "33%",
+        transform: "rotate(270deg)",
     }
 };

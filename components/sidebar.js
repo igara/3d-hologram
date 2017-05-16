@@ -27,7 +27,7 @@ export default class Sidebar extends Component {
     open={this.state.open}
     onRequestChange={(open) => this.setState({open})}
 >
-    <MenuItem onTouchTap={this.handleClose}>サンプル1</MenuItem>
+    <a href="/"><MenuItem onTouchTap={this.handleClose}>花火</MenuItem></a>
     <MenuItem onTouchTap={this.handleClose}>サンプル2</MenuItem>
     <MenuItem onTouchTap={this.handleClose}>ホログラムデータを作る</MenuItem>
 </Drawer>
