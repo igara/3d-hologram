@@ -8,7 +8,6 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import Head from "next/head";
 import Sidebar from "../components/sidebar.js";
 import Button from "../components/button.js";
-import Image from "../components/image.js";
 import Hanabi from "../components/hanabi.js";
 
 export default class extends Component {

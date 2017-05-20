@@ -30,6 +30,9 @@ app.prepare().then(() => {
             "/favicon-96x96.png",
             "/favicon.ico",
         ];
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, DELETE, OPTIONS");
+        res.setHeader("Access-Control-Max-Age", "-1");
         if (rootStaticFiles.indexOf(parsedUrl.pathname) > -1) {
             const path = join(__dirname, "static", parsedUrl.pathname);
             app.serveStatic(req, res, path);
