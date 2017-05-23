@@ -52,7 +52,7 @@ app.prepare().then(() => {
             "/sabal_chan/%E9%A1%94.png",
             "/sabal_chan/%E3%83%A2%E3%83%BC%E3%83%95.png",
             "/sabal_chan/toon_yellow.bmp",
-            "/sabal_chan/nekomimi_mikuv2.vmd",
+            "/motion/nekomimi_mikuv2.vmd",
             "/sabal_chan/sabal_chan.gif",
         ];
         res.setHeader("Access-Control-Allow-Origin", "*");
