@@ -29,6 +29,31 @@ app.prepare().then(() => {
             "/favicon-32x32.png",
             "/favicon-96x96.png",
             "/favicon.ico",
+
+            "/three/three.min.js",
+            "/three/mmdparser.min.js",
+            "/three/ammo.js",
+            "/three/TGALoader.js",
+            "/three/MMDLoader.js",
+            "/three/OutlineEffect.js",
+            "/three/CCDIKSolver.js",
+            "/three/MMDPhysics.js",
+            "/three/OrbitControls.js",
+            "/three/Detector.js",
+            "/three/stats.min.js",
+            "/three/dat.gui.min.js",
+
+            "/sabal_chan/index.html",
+            "/sabal_chan/sabal_chan.pmx",
+            "/sabal_chan/%E6%9C%8D.png",
+            "/sabal_chan/%E4%BD%93.png",
+            "/sabal_chan/%E9%AB%AA.png",
+            "/sabal_chan/%E7%9B%AE.png",
+            "/sabal_chan/%E9%A1%94.png",
+            "/sabal_chan/%E3%83%A2%E3%83%BC%E3%83%95.png",
+            "/sabal_chan/toon_yellow.bmp",
+            "/sabal_chan/nekomimi_mikuv2.vmd",
+            "/sabal_chan/sabal_chan.gif",
         ];
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, DELETE, OPTIONS");

@@ -1,0 +1,262 @@
+<html>
+    <head>
+        <script src="/three/three.min.js"></script>
+        <script src="/three/mmdparser.min.js"></script>
+        <script src="/three/ammo.js"></script>
+
+        <script src="/three/TGALoader.js"></script>
+        <script src="/three/MMDLoader.js"></script>
+        <script src="/three/OutlineEffect.js"></script>
+        <script src="/three/CCDIKSolver.js"></script>
+        <script src="/three/MMDPhysics.js"></script>
+
+        <script src="/three/Detector.js"></script>
+        <script src="/three/dat.gui.min.js"></script>
+
+        <script>
+            window.onload = function () {
+                var container;
+                var mesh;
+                var scene;
+                var camera_top, camera_right, camera_bottom, camera_left;
+                var renderer_top, renderer_right, renderer_bottom, renderer_left;
+                var effect_top, effect_right, effect_bottom, effect_left;
+                var helper_top, helper_right, helper_bottom, helper_left;
+                var ikHelper_top, ikHelper_right, ikHelper_bottom, ikHelper_left;
+                var physicsHelper_top, physicsHelper_right, physicsHelper_bottom, physicsHelper_left;
+
+                var canvas_width = window.innerWidth / 3;
+                var canvas_height = canvas_width;
+
+                var mmd_conv = canvas_width / canvas_width;
+
+                var clock = new THREE.Clock();
+                init();
+                animate();
+                function init() {
+                    container = document.createElement('div');
+                    container.style.cssText = "position: absolute;top: 30%;";
+                    document.body.appendChild( container );
+                    // camera
+                    camera_top = new THREE.PerspectiveCamera( 45, mmd_conv, 1, 2000 );
+                    camera_top.position.z = 35;
+
+                    camera_right = new THREE.PerspectiveCamera( 45, mmd_conv, 1, 2000 );
+                    camera_right.position.z = 25;
+                    camera_right.position.x = 30;
+                    camera_right.rotation.y = 0.9;
+
+                    camera_bottom = new THREE.PerspectiveCamera( 45, mmd_conv, 1, 2000 );
+                    camera_bottom.position.z = -35;
+                    camera_bottom.rotation.y = 3.15;
+
+                    camera_left = new THREE.PerspectiveCamera( 45, mmd_conv, 1, 2000 );
+                    camera_left.position.z = 25;
+                    camera_left.position.x = -30;
+                    camera_left.rotation.y = -0.9;
+
+                    // scene
+                    scene = new THREE.Scene();
+                    var gridHelper = new THREE.PolarGridHelper( 30, 10 );
+                    gridHelper.position.y = -10;
+                    scene.add( gridHelper );
+                    var ambient = new THREE.AmbientLight( 0x666666 );
+                    scene.add( ambient );
+                    var directionalLight = new THREE.DirectionalLight( 0x887766 );
+                    directionalLight.position.set( -1, 1, 1 ).normalize();
+                    scene.add( directionalLight );
+
+                    // renderer
+                    renderer_top = new THREE.WebGLRenderer( { antialias: true } );
+                    renderer_top.setPixelRatio( window.devicePixelRatio );
+                    renderer_top.setSize(canvas_width, canvas_height);
+                    renderer_top.setClearColor( new THREE.Color( 0x000000 ) );
+                    renderer_top.domElement.id = 'mmd_top';
+
+                    renderer_right = new THREE.WebGLRenderer( { antialias: true } );
+                    renderer_right.setPixelRatio( window.devicePixelRatio );
+                    renderer_right.setSize(canvas_width, canvas_height);
+                    renderer_right.setClearColor( new THREE.Color( 0x000000 ) );
+                    renderer_right.domElement.id = 'mmd_right';
+                    renderer_right.domElement.style.cssText = renderer_right.domElement.style.cssText + "transform: rotate(90deg)";
+
+                    renderer_left = new THREE.WebGLRenderer( { antialias: true } );
+                    renderer_left.setPixelRatio( window.devicePixelRatio );
+                    renderer_left.setSize( canvas_width, canvas_height);
+                    renderer_left.setClearColor( new THREE.Color( 0x000000 ) );
+                    renderer_left.domElement.id = 'mmd_left';
+                    renderer_left.domElement.style.cssText = renderer_left.domElement.style.cssText + "transform: rotate(-90deg)";
+
+                    renderer_bottom = new THREE.WebGLRenderer( { antialias: true } );
+                    renderer_bottom.setPixelRatio( window.devicePixelRatio );
+                    renderer_bottom.setSize(canvas_width, canvas_height);
+                    renderer_bottom.setClearColor( new THREE.Color( 0x000000 ) );
+                    renderer_bottom.domElement.id = 'mmd_bottom';
+                    renderer_bottom.domElement.style.cssText = renderer_bottom.domElement.style.cssText + "transform: rotate(180deg)";
+    
+                    // container
+                    var canvas = document.createElement('canvas');
+                    canvas.style.width = canvas_width;
+                    canvas.style.height = canvas_height;
+
+                    container.appendChild(canvas.cloneNode());
+                    container.appendChild( renderer_top.domElement );
+                    container.appendChild(canvas.cloneNode());
+                    container.appendChild( renderer_left.domElement );
+                    container.appendChild(canvas.cloneNode());
+                    container.appendChild( renderer_right.domElement );
+                    container.appendChild(canvas.cloneNode());
+                    container.appendChild( renderer_bottom.domElement );
+                    container.appendChild(canvas.cloneNode());
+
+                    // effect
+                    effect_top = new THREE.OutlineEffect( renderer_top );
+                    effect_right = new THREE.OutlineEffect( renderer_right );
+                    effect_bottom = new THREE.OutlineEffect( renderer_bottom );
+                    effect_left = new THREE.OutlineEffect( renderer_left );
+
+                    // model
+                    var onProgress = function ( xhr ) {
+                        if ( xhr.lengthComputable ) {
+                            var percentComplete = xhr.loaded / xhr.total * 100;
+                            console.log( Math.round(percentComplete, 2) + '% downloaded' );
+                        }
+                    };
+                    var onError = function ( xhr ) {
+                    };
+                    var modelFile = 'sabal_chan.pmx';
+                    var vmdFiles = [ 'nekomimi_mikuv2.vmd' ];
+                    helper_top = new THREE.MMDHelper();
+                    helper_right = new THREE.MMDHelper();
+                    helper_bottom = new THREE.MMDHelper();
+                    helper_left = new THREE.MMDHelper();
+                    var loader = new THREE.MMDLoader();
+                    loader.load( modelFile, vmdFiles, function ( object ) {
+                        mesh = object;
+                        mesh.position.y = -10;
+                        scene.add( mesh );
+
+                        helper_top.add( mesh );
+                        helper_top.setAnimation( mesh );
+
+                        helper_right.add( mesh );
+                        helper_right.setAnimation( mesh );
+
+                        helper_bottom.add( mesh );
+                        helper_bottom.setAnimation( mesh );
+
+                        helper_left.add( mesh );
+                        helper_left.setAnimation( mesh );
+
+                        /*
+                         * Note: create CCDIKHelper after calling helper.setAnimation()
+                         */
+                        ikHelper_top = new THREE.CCDIKHelper( mesh );
+                        ikHelper_top.visible = false;
+                        scene.add( ikHelper_top );
+
+                        ikHelper_right = new THREE.CCDIKHelper( mesh );
+                        ikHelper_right.visible = false;
+                        scene.add( ikHelper_right );
+
+                        ikHelper_bottom = new THREE.CCDIKHelper( mesh );
+                        ikHelper_bottom.visible = false;
+                        scene.add( ikHelper_bottom );
+
+                        ikHelper_left = new THREE.CCDIKHelper( mesh );
+                        ikHelper_left.visible = false;
+                        scene.add( ikHelper_left );
+                        /*
+                    　　　* Note: You're recommended to call helper.setPhysics()
+                         *       after calling helper.setAnimation().
+                         */
+                        helper_top.setPhysics( mesh );
+                        physicsHelper_top = new THREE.MMDPhysicsHelper( mesh );
+                        physicsHelper_top.visible = false;
+                        scene.add( physicsHelper_top );
+                        helper_top.unifyAnimationDuration( { afterglow: 2.0 } );
+
+                        helper_right.setPhysics( mesh );
+                        physicsHelper_right = new THREE.MMDPhysicsHelper( mesh );
+                        physicsHelper_right.visible = false;
+                        scene.add( physicsHelper_right );
+                        helper_right.unifyAnimationDuration( { afterglow: 2.0 } );
+
+                        helper_bottom.setPhysics( mesh );
+                        physicsHelper_bottom = new THREE.MMDPhysicsHelper( mesh );
+                        physicsHelper_bottom.visible = false;
+                        scene.add( physicsHelper_bottom );
+                        helper_bottom.unifyAnimationDuration( { afterglow: 2.0 } );
+
+                        helper_left.setPhysics( mesh );
+                        physicsHelper_left = new THREE.MMDPhysicsHelper( mesh );
+                        physicsHelper_left.visible = false;
+                        scene.add( physicsHelper_left );
+                        helper_left.unifyAnimationDuration( { afterglow: 2.0 } );
+                    }, onProgress, onError );
+
+                    window.addEventListener( 'resize', onWindowResize, false );
+                    var phongMaterials;
+                    var originalMaterials;
+                    function makePhongMaterials ( materials ) {
+                        var array = [];
+                        for ( var i = 0, il = materials.length; i < il; i ++ ) {
+                            var m = new THREE.MeshPhongMaterial();
+                            m.copy( materials[ i ] );
+                            m.needsUpdate = true;
+                            array.push( m );
+                            materials[ i ].map.dispose();
+                        }
+                        phongMaterials = array;
+                    }
+                }
+                function onWindowResize() {
+                    camera_top.aspect = mmd_conv;
+                    camera_top.updateProjectionMatrix();
+
+                    camera_right.aspect = mmd_conv;
+                    camera_right.updateProjectionMatrix();
+
+                    camera_bottom.aspect = mmd_conv;
+                    camera_bottom.updateProjectionMatrix();
+
+                    camera_left.aspect = mmd_conv;
+                    camera_left.updateProjectionMatrix();
+
+                    effect_top.setSize(canvas_width, canvas_height);
+                    effect_right.setSize(canvas_width, canvas_height);
+                    effect_bottom.setSize(canvas_width, canvas_height);
+                    effect_left.setSize(canvas_width, canvas_height);
+                }
+                //
+                function animate() {
+                    requestAnimationFrame( animate );
+                    render();
+                }
+                function render() {
+                    helper_top.animate( clock.getDelta() );
+                    if ( physicsHelper_top !== undefined && physicsHelper_top.visible ) physicsHelper_top.update();
+                    if ( ikHelper_top !== undefined && ikHelper_top.visible ) ikHelper_top.update();
+                    effect_top.render( scene, camera_top );
+
+                    helper_right.animate( clock.getDelta() );
+                    if ( physicsHelper_right !== undefined && physicsHelper_right.visible ) physicsHelper_right.update();
+                    if ( ikHelper_right !== undefined && ikHelper_right.visible ) ikHelper_right.update();
+                    effect_right.render( scene, camera_right );
+
+                    helper_bottom.animate( clock.getDelta() );
+                    if ( physicsHelper_bottom !== undefined && physicsHelper_bottom.visible ) physicsHelper_bottom.update();
+                    if ( ikHelper_bottom !== undefined && ikHelper_bottom.visible ) ikHelper_bottom.update();
+                    effect_bottom.render( scene, camera_bottom );
+
+                    helper_left.animate( clock.getDelta() );
+                    if ( physicsHelper_left !== undefined && physicsHelper_left.visible ) physicsHelper_left.update();
+                    if ( ikHelper_left !== undefined && ikHelper_left.visible ) ikHelper_left.update();
+                    effect_left.render( scene, camera_left );
+                }
+            };
+        </script>
+    </head>
+    <body style="margin: 0px;background: black;position:relative;">
+    </body>
+</html>
