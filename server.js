@@ -43,6 +43,8 @@ app.prepare().then(() => {
             "/three/stats.min.js",
             "/three/dat.gui.min.js",
 
+            "/motion/nekomimi_mikuv2.vmd",
+            "/motion/wavefile_full_miku_v2.vmd",
             "/sabal_chan/index.html",
             "/sabal_chan/sabal_chan.pmx",
             "/sabal_chan/%E6%9C%8D.png",
@@ -52,8 +54,12 @@ app.prepare().then(() => {
             "/sabal_chan/%E9%A1%94.png",
             "/sabal_chan/%E3%83%A2%E3%83%BC%E3%83%95.png",
             "/sabal_chan/toon_yellow.bmp",
-            "/motion/nekomimi_mikuv2.vmd",
             "/sabal_chan/sabal_chan.gif",
+            "/lerch/vonLerch.pmx",
+            "/lerch/Lerch1.png",
+            "/lerch/Lerch2.png",
+            "/lerch/index.html",
+            "/lerch/lerch.gif",
         ];
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, DELETE, OPTIONS");
