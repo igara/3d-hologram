@@ -28,8 +28,8 @@ export default class Sidebar extends Component {
     onRequestChange={(open) => this.setState({open})}
 >
     <a href="/"><MenuItem onTouchTap={this.handleClose}>花火</MenuItem></a>
-    <MenuItem onTouchTap={this.handleClose}>サンプル2</MenuItem>
-    <MenuItem onTouchTap={this.handleClose}>ホログラムデータを作る</MenuItem>
+    <a href="/sabal_chan"><MenuItem onTouchTap={this.handleClose}>サーバルちゃん</MenuItem></a>
+    <a href="/lerch"><MenuItem onTouchTap={this.handleClose}>レルヒさん</MenuItem></a>
 </Drawer>
         );
     }
