@@ -60,6 +60,8 @@ app.prepare().then(() => {
             "/lerch/Lerch2.png",
             "/lerch/index.html",
             "/lerch/lerch.gif",
+            "/kujira.gif",
+            "/crew.gif",
         ];
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, DELETE, OPTIONS");
